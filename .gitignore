@@ -1,0 +1,10 @@
+# Databricks
+.databricks/
+*.egg-info/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Python
+venv/
+.env
