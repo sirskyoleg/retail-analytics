@@ -1,0 +1,42 @@
+genie_space:
+  name: "Retail Analytics Starter Space"
+  
+  description: |
+    Ласкаво просимо до Genie для аналізу даних роздрібної торгівлі. 
+    Тут ви можете задавати питання природною мовою українською або англійською, 
+    щоб отримати інсайти про клієнтів, виручку та обслуговування.
+  
+  tables:
+    - customer_service_summary
+    - product_wise_revenue
+    - top_customers
+  
+  starter_questions:
+    - "Які топ-5 клієнтів за виручкою?"
+    - "Яка середня оцінка обслуговування клієнтів?"
+    - "Які найбільш прибуткові продукти?"
+  
+  benchmarks:
+    - question: "Які топ-5 клієнтів за загальною витраченою сумою?"
+      sql: "SELECT name, total_spent FROM retail_ai3.gold.top_customers ORDER BY total_spent DESC LIMIT 5"
+    
+    - question: "Who are the top 3 customers by spending?"
+      sql: "SELECT name, total_spent FROM retail_ai3.gold.top_customers ORDER BY total_spent DESC LIMIT 3"
+    
+    - question: "Яка загальна виручка від усіх продуктів?"
+      sql: "SELECT SUM(revenue) as total_revenue FROM retail_ai3.gold.product_wise_revenue"
+    
+    - question: "Show me the most profitable products"
+      sql: "SELECT product_name, revenue FROM retail_ai3.gold.product_wise_revenue ORDER BY revenue DESC"
+    
+    - question: "Скільки всього звернень до служби підтримки клієнтів?"
+      sql: "SELECT SUM(total_records) as total_requests FROM retail_ai3.gold.customer_service_summary"
+    
+    - question: "What is the most common customer service issue category?"
+      sql: "SELECT issue_category, total_records FROM retail_ai3.gold.customer_service_summary ORDER BY total_records DESC LIMIT 1"
+    
+    - question: "Покажи всі категорії проблем обслуговування клієнтів"
+      sql: "SELECT issue_category, total_records FROM retail_ai3.gold.customer_service_summary ORDER BY total_records DESC"
+    
+    - question: "Який продукт має найменшу виручку?"
+      sql: "SELECT product_name, revenue FROM retail_ai3.gold.product_wise_revenue ORDER BY revenue ASC LIMIT 1"

@@ -1,0 +1,54 @@
+resources:
+  pipelines:
+    retail_pipeline:
+      name: "${bundle.target}-retail-analytics-pipeline"
+      
+      target: "${var.catalog_name}"
+      
+      libraries:
+        # Bronze layer
+        - notebook:
+            path: ../src/pipelines/bronze/ingest_customers.sql
+        - notebook:
+            path: ../src/pipelines/bronze/ingest_orders.sql
+        - notebook:
+            path: ../src/pipelines/bronze/ingest_products.sql
+        
+        # Silver layer
+        - notebook:
+            path: ../src/pipelines/silver/clean_customers.sql
+        - notebook:
+            path: ../src/pipelines/silver/clean_orders.sql
+        - notebook:
+            path: ../src/pipelines/silver/clean_products.sql
+        
+        # Gold layer
+        - notebook:
+            path: ../src/pipelines/gold/customer_service_summary.sql
+        - notebook:
+            path: ../src/pipelines/gold/product_wise_revenue.sql
+        - notebook:
+            path: ../src/pipelines/gold/top_customers.sql
+      
+      configuration:
+        "pipelines.trigger.interval": "6 hours"
+      
+      clusters:
+        - label: "default"
+          autoscale:
+            min_workers: 1
+            max_workers: 5
+            mode: "ENHANCED"
+      
+      development: true
+      continuous: false
+      channel: "CURRENT"
+      edition: "ADVANCED"
+      photon: true
+      
+      notifications:
+        - email_recipients:
+            - "your-email@company.com"
+          alerts:
+            - "on-update-failure"
+            - "on-flow-failure"
