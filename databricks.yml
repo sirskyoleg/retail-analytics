@@ -18,7 +18,7 @@ targets:
     mode: development
     default: true
     workspace:
-      host: https://your-dev-workspace.cloud.databricks.com
+      host: https://dbc-9e376111-e24d.cloud.databricks.com
       root_path: /Workspace/.bundles/dev/${bundle.name}
     
     variables:

@@ -1,0 +1,46 @@
+name: Deploy to Development
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment: development
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Databricks CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+      
+      - name: Validate Bundle
+        env:
+          DATABRICKS_HOST: ${{ secrets.DEV_DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DEV_DATABRICKS_TOKEN }}
+        run: |
+          echo "Validating bundle for development..."
+          databricks bundle validate --target dev
+      
+      - name: Deploy to Development
+        env:
+          DATABRICKS_HOST: ${{ secrets.DEV_DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DEV_DATABRICKS_TOKEN }}
+        run: |
+          echo "Deploying to development workspace..."
+          databricks bundle deploy --target dev
+      
+      - name: Deployment Summary
+        run: |
+          echo "✅ Successfully deployed to development!"
+          echo "Workspace: ${{ secrets.DEV_DATABRICKS_HOST }}"
+          echo "Bundle: retail_analytics"
+          echo "Target: dev"
